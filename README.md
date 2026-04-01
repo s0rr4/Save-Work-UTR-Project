@@ -1,11 +1,11 @@
-# UrbanAlert
+# Save World
 
-UrbanAlert is a real-time urban incident reporting and management platform built with Node.js and Express. It enables users to report, track, and respond to incidents in urban areas efficiently.
+Save World is a workplace complaint management platform built with Node.js and Express. It allows employees to submit complaints within a work environment, where each report is automatically prioritized based on the role or authority level of the person submitting it, ensuring that the most critical issues are addressed first.
 
 ## Installation
 
 1. Clone the repository:
-git clone <git@github.com:s0rr4/UrbanAlert4790HD.git>
+git clone <git@github.com:s0rr4/Save-World-UTR-Project.git>
 cd UrbanAlert4790HD
 
 2. Install dependencies:
@@ -43,4 +43,7 @@ PORT=3000
 
 ### Reports Routes
 - `GET /api/getAllReports` - Get all reports
+- `GET /api/getReport/{id}` - Get one specific report
 - `POST /api/createReports` - Create new report
+- `PUT /api/updateReport/{id}` - Update one specific report
+- `DELETE /api/deleteReport/{id}` - Delete one specific report
