@@ -1,6 +1,6 @@
-# Save World
+# Save Work
 
-Save World is a workplace complaint management platform built with Node.js and Express. It allows employees to submit complaints within a work environment, where each report is automatically prioritized based on the role or authority level of the person submitting it, ensuring that the most critical issues are addressed first.
+Save Work is a workplace complaint management platform built with Node.js and Express. It allows employees to submit complaints within a work environment, where each report is automatically prioritized based on the role or authority level of the person submitting it, ensuring that the most critical issues are addressed first.
 
 ## Installation
 
