@@ -3,25 +3,122 @@ const router = express.Router();
 const reportController = require("../controllers/reporteControllers");
 const auth = require('../middlewares/auth');
 
-// http://localhost:3000/api/getAllReports
-// http://localhost:3000/api/createReports
-// http://localhost:3000/api/getReport/:id
-// http://localhost:3000/api/updateReport/:id
-// http://localhost:3000/api/deleteReport/:id
+/**
+ * @swagger
+ * tags:
+ *   name: Reportes
+ *   description: Gestión de reportes
+ */
 
-//GET - Obtener todos los reportes
+/**
+ * @swagger
+ * /api/getAllReports:
+ *   get:
+ *     summary: Obtener todos los reportes
+ *     tags: [Reportes]
+ *     responses:
+ *       200:
+ *         description: Lista de reportes
+ */
 router.get('/getAllReports', reportController.getReportes);
 
-//GET - Obtener reporte por ID
+/**
+ * @swagger
+ * /api/getReport/{id}:
+ *   get:
+ *     summary: Obtener un reporte por ID
+ *     tags: [Reportes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del reporte
+ *     responses:
+ *       200:
+ *         description: Reporte encontrado
+ *       404:
+ *         description: Reporte no encontrado
+ */
 router.get('/getReport/:id', reportController.getReporteById);
 
-//POST - Crear nuevo reporte
+/**
+ * @swagger
+ * /api/createReports:
+ *   post:
+ *     summary: Crear un nuevo reporte
+ *     tags: [Reportes]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             example:
+ *               titulo: "Reporte de prueba"
+ *               descripcion: "Descripción del reporte"
+ *     responses:
+ *       201:
+ *         description: Reporte creado
+ *       401:
+ *         description: No autorizado
+ */
 router.post('/createReports', auth, reportController.createReporte);
 
-//PUT - Actualizar reporte
+/**
+ * @swagger
+ * /api/updateReport/{id}:
+ *   put:
+ *     summary: Actualizar un reporte
+ *     tags: [Reportes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             example:
+ *               titulo: "Nuevo título"
+ *               descripcion: "Nueva descripción"
+ *     responses:
+ *       200:
+ *         description: Reporte actualizado
+ *       401:
+ *         description: No autorizado
+ */
 router.put('/updateReport/:id', auth, reportController.updateReporte);
 
-//DELETE - Eliminar reporte
+/**
+ * @swagger
+ * /api/deleteReport/{id}:
+ *   delete:
+ *     summary: Eliminar un reporte
+ *     tags: [Reportes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Reporte eliminado
+ *       401:
+ *         description: No autorizado
+ */
 router.delete('/deleteReport/:id', auth, reportController.deleteReporte);
 
 module.exports = router;

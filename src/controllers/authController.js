@@ -4,38 +4,64 @@ const jwt = require('jsonwebtoken');
 
 exports.registrarUsuario = async (req, res) => {
     try {
-       const {email, password} = req.body
+        const { email, password } = req.body;
 
-        //User exist?
-        let usuario = await Usuario.findOne({email});
-        if (usuario) return res.status(400).json({ msg: 'El usuario ya existe'});
+        // Validación básica
+        if (!email || !password) {
+            return res.status(400).json({ msg: 'Faltan datos' });
+        }
 
-        usuario = new Usuario({email, password});
+        // Verificar si ya existe
+        let usuario = await Usuario.findOne({ email });
+        if (usuario) {
+            return res.status(400).json({ msg: 'El usuario ya existe' });
+        }
 
-        //Encrypt
+        // Crear usuario
+        usuario = new Usuario({ email, password });
+
+        // Encriptar password
         const salt = await bcrypt.genSalt(10);
-        usuario.password = await bcrypt.hash(password,salt);
+        usuario.password = await bcrypt.hash(password, salt);
 
         await usuario.save();
-        res.json(201).json({msg: ''})
+
+        return res.status(201).json({
+            msg: 'Usuario registrado correctamente'
+        });
+
     } catch (error) {
-        res.status(500).json({error: 'Error al registrar el usuario', errorMSG: error}) //internal server error
-        
+        console.error("🔥 ERROR REGISTRO:", error);
+
+        return res.status(500).json({
+            error: 'Error al registrar el usuario',
+            errorMSG: error.message
+        });
     }
-}
+};
 
 exports.loginUsuario = async (req, res) => {
     try {
-        const{email, password} = req.body;
-        // Verificar si el usuario existe
-        const usuario = await Usuario.findOne({email});
-        if (!usuario) return res.status(400).json({msg: 'El usuario no existe'})
-        
-        // Verificar la password
+        const { email, password } = req.body;
+
+        // Validación básica
+        if (!email || !password) {
+            return res.status(400).json({ msg: 'Faltan datos' });
+        }
+
+        // Verificar usuario
+        const usuario = await Usuario.findOne({ email });
+        if (!usuario) {
+            return res.status(400).json({ msg: 'El usuario no existe' });
+        }
+
+        // Verificar password
         const isMatch = await bcrypt.compare(password, usuario.password);
-        if(!ismatch) return res.status(400).json({msg: 'La password es incorrecta'})
-        
-        // Create payload
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'La password es incorrecta' });
+        }
+
+        // Payload
         const payload = {
             usuario: {
                 id: usuario.id,
@@ -43,18 +69,19 @@ exports.loginUsuario = async (req, res) => {
             }
         };
 
-        // Sign jwt
-        jwt.sign(
+        // Generar JWT
+        const token = jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            {expiresIn: '1h'},
-            (error, token) => {
-                if (error) throw error;
-                res.json({token});
-            }
+            { expiresIn: '1h' }
         );
-        
+
+        return res.json({ token });
+
     } catch (error) {
-        res.status(500).json({error: 'Error en el servidor', errorMSG: error})
+        return res.status(500).json({
+            error: 'Error en el servidor',
+            errorMSG: error.message
+        });
     }
-}
+};
