@@ -5,7 +5,7 @@ Save Work is a workplace complaint management platform built with Node.js and Ex
 ## Installation
 
 1. Clone the repository:
-git clone <git@github.com:s0rr4/Save-World-UTR-Project.git>
+git clone <git@github.com:s0rr4/Save-Work-UTR-Project.git>
 cd UrbanAlert4790HD
 
 2. Install dependencies:
