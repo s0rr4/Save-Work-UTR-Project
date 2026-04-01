@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 
 exports.registrarUsuario = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { name, lastname, email, password, role } = req.body;
 
         // Validación básica
-        if (!email || !password) {
+        if (!name || !lastname || !email || !password) {
             return res.status(400).json({ msg: 'Faltan datos' });
         }
 
@@ -17,8 +17,14 @@ exports.registrarUsuario = async (req, res) => {
             return res.status(400).json({ msg: 'El usuario ya existe' });
         }
 
-        // Crear usuario
-        usuario = new Usuario({ email, password });
+        // Crear usuario con TODOS los campos
+        usuario = new Usuario({
+            name,
+            lastname,
+            email,
+            password,
+            role: role || 'user'
+        });
 
         // Encriptar password
         const salt = await bcrypt.genSalt(10);
@@ -65,7 +71,8 @@ exports.loginUsuario = async (req, res) => {
         const payload = {
             usuario: {
                 id: usuario.id,
-                email: usuario.email
+                email: usuario.email,
+                role: usuario.role
             }
         };
 
@@ -79,6 +86,8 @@ exports.loginUsuario = async (req, res) => {
         return res.json({ token });
 
     } catch (error) {
+        console.error("🔥 ERROR LOGIN:", error);
+
         return res.status(500).json({
             error: 'Error en el servidor',
             errorMSG: error.message

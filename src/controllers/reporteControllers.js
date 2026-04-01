@@ -26,25 +26,43 @@ exports.getReporteById = async (req, res) => {
 
 exports.createReporte = async (req, res) => {
     try {
-        const {titulo, descripcion, ubicacion} = req.body;
+        const { titulo, descripcion } = req.body;
+
+        if (!titulo || !descripcion) {
+            return res.status(400).json({ error: "Faltan datos" });
+        }
+
         let prioridad = "media";
-        if(descripcion.toLowerCase().includes('fuego') || 
-        descripcion.toLowerCase().includes('incendio')){
+
+        if (
+            descripcion.toLowerCase().includes('fuego') ||
+            descripcion.toLowerCase().includes('incendio')
+        ) {
             prioridad = "alta";
         }
+
         const nuevoReporte = new Reporte({
             titulo,
             descripcion,
-            ubicacion,
             prioridad
         });
 
-        await nuevoReporte.save(); //Saved in MongoDB
-        res.status(201).json(nuevoReporte); //API response
+        await nuevoReporte.save();
+
+        return res.status(201).json({
+            msg: "Reporte creado",
+            reporte: nuevoReporte
+        });
+
     } catch (error) {
-        res.status(400).json({error: "Error: Create reports", message: error})
+        console.error("🔥 ERROR CREATE:", error);
+
+        res.status(400).json({
+            error: "Error: Create reports",
+            message: error.message
+        });
     }
-}
+};
 
 exports.updateReporte = async (req, res) => {
     try {

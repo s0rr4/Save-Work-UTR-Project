@@ -21,13 +21,32 @@ const authController = require("../controllers/authController");
  *         application/json:
  *           schema:
  *             type: object
- *             example:
- *               nombre: "Gael"
- *               email: "correo@email.com"
- *               password: "123456"
+ *             required:
+ *               - name
+ *               - lastname
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Gael"
+ *               lastname:
+ *                 type: string
+ *                 example: "Ruiz"
+ *               email:
+ *                 type: string
+ *                 example: "correo@email.com"
+ *               password:
+ *                 type: string
+ *                 example: "123456"
+ *               role:
+ *                 type: string
+ *                 example: "user"
  *     responses:
  *       201:
  *         description: Usuario registrado
+ *       400:
+ *         description: Error en los datos
  */
 router.post('/register', authController.registrarUsuario);
 
