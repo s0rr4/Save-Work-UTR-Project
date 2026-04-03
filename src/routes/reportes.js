@@ -90,8 +90,9 @@ router.post('/createReports', auth, reportController.createReporte);
  *           schema:
  *             type: object
  *             example:
- *               titulo: "Nuevo título"
- *               descripcion: "Nueva descripción"
+ *               title: "Nuevo título"
+ *               description: "Nueva descripción"
+ *              priority: "Nueva prioridad"
  *     responses:
  *       200:
  *         description: Reporte actualizado
