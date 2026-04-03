@@ -2,7 +2,9 @@ const Reporte = require("../models/Reporte");
 
 exports.getReportes = async (req, res) => {
     try {
-        const reportes = await Reporte.find(); 
+        const reportes = await Reporte.find()
+            .populate('user', 'name lastname email'); // 👈 aquí
+
         res.json(reportes); 
     } catch (error) {
         res.status(500).json({error:"Error: Get reports", message:error})
@@ -12,7 +14,8 @@ exports.getReportes = async (req, res) => {
 exports.getReporteById = async (req, res) => {
     try {
         const { id } = req.params;
-        const reporte = await Reporte.findOne({ _id: id });
+        const reporte = await Reporte.findById(id)
+    .populate('user', 'name lastname email');
         
         if (!reporte) {
             return res.status(404).json({ error: "Reporte no encontrado" });
@@ -26,25 +29,24 @@ exports.getReporteById = async (req, res) => {
 
 exports.createReporte = async (req, res) => {
     try {
-        const { titulo, descripcion } = req.body;
+        let { title, description, priority } = req.body;
 
-        if (!titulo || !descripcion) {
+        if (!title || !description) {
             return res.status(400).json({ error: "Faltan datos" });
         }
 
-        let prioridad = "media";
-
         if (
-            descripcion.toLowerCase().includes('fuego') ||
-            descripcion.toLowerCase().includes('incendio')
+            description.toLowerCase().includes('fuego') ||
+            description.toLowerCase().includes('incendio')
         ) {
-            prioridad = "alta";
+            priority = "high";
         }
 
         const nuevoReporte = new Reporte({
-            titulo,
-            descripcion,
-            prioridad
+            title,
+            description,
+            priority,
+            user: req.user.id // 👈 aquí guardas el ID del usuario
         });
 
         await nuevoReporte.save();
@@ -67,11 +69,11 @@ exports.createReporte = async (req, res) => {
 exports.updateReporte = async (req, res) => {
     try {
         const { id } = req.params;
-        const { titulo, descripcion, ubicacion, prioridad, estado } = req.body;
+        const { title, description, priority } = req.body;
 
         const reporteActualizado = await Reporte.findByIdAndUpdate(
             id,
-            { titulo, descripcion, ubicacion, prioridad, estado },
+            { title, description, priority },
             { new: true, runValidators: true }
         );
 

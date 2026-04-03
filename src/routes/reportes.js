@@ -58,8 +58,9 @@ router.get('/getReport/:id', reportController.getReporteById);
  *           schema:
  *             type: object
  *             example:
- *               titulo: "Reporte de prueba"
- *               descripcion: "Descripción del reporte"
+ *               title: "Reporte de prueba"
+ *               description: "Descripción del reporte"
+ *               priority: "medium"
  *     responses:
  *       201:
  *         description: Reporte creado

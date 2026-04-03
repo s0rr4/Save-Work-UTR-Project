@@ -30,12 +30,12 @@ const usuarioSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['user', 'admin'],
-        default: 'user'
+        enum: ['worker', 'supervisor', 'admin'],
+        default: 'worker'
     }
 
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model("Usuario", usuarioSchema);
+module.exports = mongoose.model("User", usuarioSchema);

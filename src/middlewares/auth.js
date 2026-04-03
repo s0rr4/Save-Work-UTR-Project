@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
         const token = authHeader.split(' ')[1];
 
         const cifrado = jwt.verify(token, process.env.JWT_SECRET);
-        req.usuario = cifrado.usuario;
+        req.user = cifrado.user;
 
         next();
     } catch (error) {
