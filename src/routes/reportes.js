@@ -92,7 +92,7 @@ router.post('/createReports', auth, reportController.createReporte);
  *             example:
  *               title: "Nuevo título"
  *               description: "Nueva descripción"
- *              priority: "Nueva prioridad"
+ *               priority: "Nueva prioridad"
  *     responses:
  *       200:
  *         description: Reporte actualizado
